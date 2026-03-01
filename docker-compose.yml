@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  # ---------------------------------------------------
+  # 1. THE BACKEND (Bun + FFmpeg)
+  # ---------------------------------------------------
+  backend:
+    # Look for the Dockerfile in the current (root) directory
+    build: .
+
+    # Map your machine's port 8080 to the container's port 8080
+    ports:
+      - "8080:8080"
+
+    # IMPORTANT: This links the "assets" folder on your hard drive
+    # to the "/app/assets" folder inside the container.
+    # Without this, downloaded videos disappear when the container stops!
+    volumes:
+      - ./assets:/app/assets
+
+  # ---------------------------------------------------
+  # 2. THE FRONTEND (SvelteKit + Node)
+  # ---------------------------------------------------
+  frontend:
+    # Look for the Dockerfile inside the 'frontend' folder
+    build: ./frontend
+
+    # Map your machine's port 5173 to the container's port 3000
+    # (SvelteKit's Node adapter exposes port 3000 by default)
+    ports:
+      - "5173:3000"
+
+    # Tells Docker to wait and boot the backend up first
+    depends_on:
+      - backend

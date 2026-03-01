@@ -1,0 +1,33 @@
+# ==========================================
+# STAGE 1: Build & Prune
+# ==========================================
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+# Install all dependencies (including dev tools)
+COPY package*.json ./
+RUN npm ci
+
+# Copy code and build the SvelteKit app
+COPY . .
+RUN npm run build
+
+# THE MAGIC TRICK: Delete all heavy dev tools now that the build is done
+RUN npm prune --production
+
+# ==========================================
+# STAGE 2: The Tiny Runner
+# ==========================================
+FROM node:20-alpine
+WORKDIR /app
+
+# Copy ONLY the compiled app and the slimmed-down node_modules
+COPY --from=builder /app/build build/
+COPY --from=builder /app/node_modules node_modules/
+COPY package.json .
+
+# Set environment to production for extra Node.js speed
+ENV NODE_ENV=production
+EXPOSE 5173
+
+CMD ["node", "build"]

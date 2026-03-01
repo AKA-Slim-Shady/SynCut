@@ -1,15 +1,11 @@
-# real-time-video-editor
+# SynCut - RealTime Collaborative Video Editor
 
-To install dependencies:
-
+## 1. Running the application
 ```bash
-bun install
+docker-compose up --build
 ```
 
-To run:
-
+## 2. Gracefully shutting down the application
 ```bash
-bun run index.ts
+docker-compose down
 ```
-
-This project was created using `bun init` in bun v1.3.6. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.

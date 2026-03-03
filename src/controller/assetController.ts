@@ -1,5 +1,6 @@
 // src/controller/assetController.ts
 import { assetService } from "../services/assetService";
+import { ffmpegService } from "../services/ffmpeg";
 import type { Request, Response } from "express";
 
 export const assetController = {
@@ -24,6 +25,24 @@ export const assetController = {
     } catch (error: any) {
       console.error("[Asset Controller Error]:", error.message);
       res.status(500).json({ success: false, error: error.message });
+    }
+  },
+
+  proxyGen: async (req: Request, res: Response) => {
+    const inputVideoPath = req.body.inputVideoPath;
+    if (!inputVideoPath) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Input video path is required." });
+    }
+    try {
+      const outputVideoPath =
+        await ffmpegService.resolutionReduce(inputVideoPath);
+      return res
+        .status(200)
+        .json({ success: true, message: "Proxy generated successfully!" });
+    } catch (error: any) {
+      console.error("[Asset Controller Error]:", error.message);
     }
   },
 };

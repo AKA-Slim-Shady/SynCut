@@ -17,7 +17,7 @@ export const assetService = {
     }
 
     // 1. Ensure the /assets directory exists on your local machine
-    const dirPath = join(process.cwd(), "assets");
+    const dirPath = join(process.cwd(), "videos");
     await mkdir(dirPath, { recursive: true });
 
     // 2. Define the save path

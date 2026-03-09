@@ -20,4 +20,4 @@ echo "PUBLIC_GOOGLE_API_KEY=$API_KEY" >> ./frontend/.env
 echo "✅ Environment ready! Booting up Docker containers..."
 
 # 4. Start the architecture
-docker-compose up --build
+docker compose up --build
